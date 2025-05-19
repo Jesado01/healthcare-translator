@@ -1,5 +1,4 @@
 import openai
-import speech_recognition as sr
 from gtts import gTTS
 from django.shortcuts import render
 from django.http import JsonResponse
