@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Healthcare Translator</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body class="p-4">
+
+  <h2>🩺 Healthcare Translator Web App</h2>
+
+  <form id="translateForm" class="mt-3">
+    <label for="languageSelect">Idioma de traducción:</label>
+    <select id="languageSelect" name="target_lang" class="form-select mb-3">
+      <option value="es">Español</option>
+      <option value="en">English</option>
+      <option value="fr">Français</option>
+    </select>
+
+    <label for="recognizedText">Texto reconocido:</label>
+    <textarea id="recognizedText" name="text" class="form-control mb-3" rows="4" placeholder="Haz clic en '🎤 Hablar' para comenzar..."></textarea>
+
+    <button class="btn btn-success w-100 mb-2" type="submit">Traducir y reproducir 🔁</button>
+  </form>
+
+  <div class="d-grid">
+    <button id="startBtn" class="btn btn-primary mb-3">🎤 Hablar</button>
+  </div>
+
+  <h5>Resultado traducido:</h5>
+  <p id="output" class="border p-3"></p>
+  <audio id="audio" controls style="display: none;"></audio>
+
+  <script>
+    // Reconocimiento de voz
+    const startBtn = document.getElementById('startBtn');
+    const recognizedText = document.getElementById('recognizedText');
+    const output = document.getElementById('output');
+    const audio = document.getElementById('audio');
+
+    let recognition;
+    if ('webkitSpeechRecognition' in window) {
+      recognition = new webkitSpeechRecognition();
+    } else {
+      alert('Tu navegador no soporta reconocimiento de voz');
+    }
+
+    if (recognition) {
+      recognition.continuous = false;
+      recognition.lang = 'en-US';  // Puedes cambiarlo dinámicamente si lo deseas
+      recognition.interimResults = false;
+
+      startBtn.onclick = () => {
+        recognition.start();
+      };
+
+      recognition.onresult = (event) => {
+        const transcript = event.results[0][0].transcript;
+        recognizedText.value = transcript;
+      };
+
+      recognition.onerror = (event) => {
+        console.error("Error de reconocimiento: ", event.error);
+      };
+    }
+
+    // Enviar al backend para traducir
+    document.getElementById("translateForm").addEventListener("submit", async (e) => {
+      e.preventDefault();
+
+      const formData = new FormData(e.target);
+      const response = await fetch("/translate/", {
+        method: "POST",
+        body: formData,
+      });
+
+      const data = await response.json();
+      output.innerText = data.translated;
+      audio.src = data.audio_url;
+      audio.style.display = "block";
+      audio.load();
+    });
+  </script>
+
+</body>
+</html>
