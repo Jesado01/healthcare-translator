@@ -10,7 +10,6 @@ altgraph==0.17.4
 annotated-types==0.7.0
 anyio==4.5.2
 appdirs==1.4.4
-appnope @ file:///opt/concourse/worker/volumes/live/5f13e5b3-5355-4541-5fc3-f08850c73cf9/volume/appnope_1606859448618/work
 asgiref==3.8.1
 asttokens @ file:///opt/conda/conda-bld/asttokens_1646925590279/work
 astunparse==1.6.3
@@ -48,6 +47,7 @@ google-auth-oauthlib==1.0.0
 google-pasta==0.2.0
 grpcio==1.56.0
 gTTS==2.5.4
+gunicorn==23.0.0
 gym==0.26.2
 gym-notices==0.0.8
 h11==0.16.0
