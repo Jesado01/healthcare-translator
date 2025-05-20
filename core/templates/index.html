@@ -1,71 +1,46 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
   <meta charset="UTF-8">
-  <title>Healthcare Translator</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <title>Prueba Voz</title>
 </head>
-<body class="p-4">
-
-  <h2>🩺 Healthcare Translator Web App</h2>
-
-  <form id="translateForm" class="mt-3">
-    <label for="languageSelect">Idioma de traducción:</label>
-    <select id="languageSelect" name="target_lang" class="form-select mb-3">
-      <option value="es">Español</option>
-      <option value="en">English</option>
-      <option value="fr">Français</option>
-    </select>
-
-    <label for="recognizedText">Texto reconocido:</label>
-    <textarea disabled id="recognizedText" name="text" class="form-control mb-3" rows="4" placeholder="Haz clic en '🎤 Hablar' para comenzar..."></textarea>
-
-    <button class="btn btn-success w-100 mb-2" type="submit">Traducir y reproducir 🔁</button>
-  </form>
-
-  <div class="d-grid">
-    <button id="startBtn" class="btn btn-primary mb-3">🎤 Speak</button>
-  </div>
-
-  <h5>Resultado traducido:</h5>
-  <p id="output" class="border p-3"></p>
-  <audio id="audio" controls style="display: none;"></audio>
+<body>
+  <h1>🎤 Reconocimiento de voz</h1>
+  <button id="startBtn">🎙️ Hablar</button>
+  <textarea id="recognizedText" rows="4" cols="50" placeholder="Tu voz aparecerá aquí..."></textarea>
 
   <script>
     const startBtn = document.getElementById('startBtn');
     const recognizedText = document.getElementById('recognizedText');
-  
+
     if ('webkitSpeechRecognition' in window) {
       const recognition = new webkitSpeechRecognition();
       recognition.lang = 'es-MX';
       recognition.continuous = false;
       recognition.interimResults = false;
-  
-      recognition.onstart = () => console.log("🎙️ Mic started");
-      recognition.onaudiostart = () => console.log("🔊 Audio capturing started");
-      recognition.onspeechstart = () => console.log("🗣️ Speech detected");
-      recognition.onspeechend = () => console.log("🛑 Speech ended");
-      recognition.onaudioend = () => console.log("🔇 Audio capturing ended");
-      recognition.onend = () => console.log("❌ Recognition ended");
-  
+
+      recognition.onstart = () => console.log("🎙️ Iniciando micrófono...");
+      recognition.onspeechstart = () => console.log("🗣️ Detectando voz...");
+      recognition.onspeechend = () => console.log("🛑 Fin de la voz.");
+      recognition.onend = () => console.log("✅ Reconocimiento terminado.");
+
       recognition.onresult = (event) => {
         const transcript = event.results[0][0].transcript;
-        console.log("📄 Transcript:", transcript);
+        console.log("📄 Texto reconocido:", transcript);
         recognizedText.value = transcript;
       };
-  
+
       recognition.onerror = (event) => {
-        console.error("❗ Recognition error:", event.error);
+        console.error("❗ Error:", event.error);
+        alert("Error: " + event.error);
       };
-  
-      startBtn.addEventListener('click', () => {
+
+      startBtn.addEventListener("click", () => {
         recognition.start();
       });
     } else {
-      alert("Speech recognition not supported in this browser");
+      alert("Tu navegador no soporta reconocimiento de voz.");
     }
   </script>
-
 </body>
 </html>
