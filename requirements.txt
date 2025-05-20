@@ -1,5 +1,5 @@
 Django>=4.2
 gunicorn
-openai
+openai==1.79.0
 gtts
 python-dotenv
