@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  {% load static %}
+  <meta charset="UTF-8">
+  <title>Prueba Voz</title>
+  <link rel="icon" href="{% static 'favicon.ico' %}" type="image/x-icon">
+</head>
+<body>
+  <h1>🎤 Reconocimiento de voz</h1>
+  <button id="startBtn">🎙️ Hablar</button>
+  <textarea id="recognizedText" rows="4" cols="50" placeholder="Tu voz aparecerá aquí..."></textarea>
+
+  <script>
+    const startBtn = document.getElementById('startBtn');
+    const recognizedText = document.getElementById('recognizedText');
+
+    if ('webkitSpeechRecognition' in window) {
+      const recognition = new webkitSpeechRecognition();
+      recognition.lang = 'es-MX';
+      recognition.continuous = true;
+      recognition.interimResults = false;
+
+      recognition.onstart = () => console.log("🎙️ Iniciando micrófono...");
+      recognition.onspeechstart = () => console.log("🗣️ Detectando voz...");
+      recognition.onspeechend = () => console.log("🛑 Fin de la voz.");
+      recognition.onend = () => console.log("✅ Reconocimiento terminado.");
+
+      recognition.onresult = (event) => {
+        const transcript = event.results[0][0].transcript;
+        console.log("📄 Texto reconocido:", transcript);
+        recognizedText.value = transcript;
+      };
+
+      recognition.onerror = (event) => {
+        console.error("❗ Error:", event.error);
+        alert("Error: " + event.error);
+      };
+
+      startBtn.addEventListener("click", () => {
+        recognition.start();
+      });
+    } else {
+      alert("Tu navegador no soporta reconocimiento de voz.");
+    }
+  </script>
+</body>
+</html>
