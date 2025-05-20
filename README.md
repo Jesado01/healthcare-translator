@@ -21,7 +21,9 @@ A web application that enables real-time multilingual translation between patien
 - Server: **gunicorn**
 - Env mgmt: **python-dotenv**
 
-## 📂 Project Structure
+  ## 📂 Project Structure
+
+```text
 translator_app/
 ├── core/
 │   ├── views.py
@@ -36,7 +38,6 @@ translator_app/
 ├── manage.py
 ├── .gitignore
 └── .env.example
-
 ## ⚙️ Environment Variables (`.env`)
 
 This file must **NOT** be committed. Use `.env.example` as a reference:
@@ -44,23 +45,32 @@ This file must **NOT** be committed. Use `.env.example` as a reference:
 ```env
 OPENAI_API_KEY=your-api-key-here
 DJANGO_SETTINGS_MODULE=translator_app.settings
+```
 
+🧪 Run Locally
+```clone
 # Clone the repo
 git clone https://github.com/Jesado01/healthcare-translator.git
 cd healthcare-translator
-
+```
+```create
 # Create and activate virtual environment
 python -m venv venv
 source venv/bin/activate  # or venv\Scripts\activate on Windows
-
+```
+```install
 # Install dependencies
 pip install -r requirements.txt
-
+```
+```collect
 # Collect static files
 python manage.py collectstatic
+```
 
+```run
 # Run the server
 python manage.py runserver
+```
 
 🌐 Live Demo
 
