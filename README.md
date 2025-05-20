@@ -38,6 +38,8 @@ translator_app/
 ├── manage.py
 ├── .gitignore
 └── .env.example
+```
+
 ## ⚙️ Environment Variables (`.env`)
 
 This file must **NOT** be committed. Use `.env.example` as a reference:
