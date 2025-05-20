@@ -5,6 +5,7 @@ from django.views.decorators.csrf import csrf_exempt
 from django.shortcuts import render
 from gtts import gTTS
 from openai import OpenAI
+import traceback
 
 client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
 
@@ -41,7 +42,7 @@ def translate_text(request):
             })
 
         except Exception as e:
-            print("❌ Error:", e)
+            traceback.print_exc()
             return JsonResponse({"error": "Error processing translation."}, status=500)
 
     return JsonResponse({"error": "Invalid request method"}, status=400)
