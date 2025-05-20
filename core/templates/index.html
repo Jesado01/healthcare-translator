@@ -43,8 +43,8 @@
   
     if ('webkitSpeechRecognition' in window) {
       recognition = new webkitSpeechRecognition();
-      recognition.lang = 'en-US';
-      recognition.continuous = false;
+      recognition.lang = 'es-MX';
+      recognition.continuous = true;
       recognition.interimResults = false;
   
       recognition.onresult = function(event) {
