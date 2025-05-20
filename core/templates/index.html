@@ -35,50 +35,36 @@
   <script>
     const startBtn = document.getElementById('startBtn');
     const recognizedText = document.getElementById('recognizedText');
-    const output = document.getElementById('output');
-    const audio = document.getElementById('audio');
-    const form = document.getElementById('translateForm');
-  
-    let recognition;
   
     if ('webkitSpeechRecognition' in window) {
-      recognition = new webkitSpeechRecognition();
+      const recognition = new webkitSpeechRecognition();
       recognition.lang = 'es-MX';
-      recognition.continuous = true;
+      recognition.continuous = false;
       recognition.interimResults = false;
   
-      recognition.onresult = function(event) {
+      recognition.onstart = () => console.log("🎙️ Mic started");
+      recognition.onaudiostart = () => console.log("🔊 Audio capturing started");
+      recognition.onspeechstart = () => console.log("🗣️ Speech detected");
+      recognition.onspeechend = () => console.log("🛑 Speech ended");
+      recognition.onaudioend = () => console.log("🔇 Audio capturing ended");
+      recognition.onend = () => console.log("❌ Recognition ended");
+  
+      recognition.onresult = (event) => {
         const transcript = event.results[0][0].transcript;
+        console.log("📄 Transcript:", transcript);
         recognizedText.value = transcript;
       };
   
-      recognition.onerror = function(event) {
-        console.error('Recognition error:', event.error);
+      recognition.onerror = (event) => {
+        console.error("❗ Recognition error:", event.error);
       };
   
       startBtn.addEventListener('click', () => {
         recognition.start();
       });
     } else {
-      alert('Your browser does not support voice recognition.');
+      alert("Speech recognition not supported in this browser");
     }
-  
-    // Enviar texto al backend para traducir
-    form.addEventListener("submit", async (e) => {
-      e.preventDefault();
-  
-      const formData = new FormData(form);
-      const response = await fetch("/translate/", {
-        method: "POST",
-        body: formData,
-      });
-  
-      const data = await response.json();
-      output.innerText = data.translated;
-      audio.src = data.audio_url;
-      audio.style.display = "block";
-      audio.load();
-    });
   </script>
 
 </body>
