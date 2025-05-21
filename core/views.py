@@ -35,10 +35,16 @@ def translate_text(request):
         target_language = request.POST.get("language", "en")
 
         try:
-            # Traduce usando LibreTranslate
+            # Traducción segura con validación
             translated = translate_libretranslate(input_text, target_language)
 
-            # Genera el audio con gTTS
+            if not translated:
+                return JsonResponse({
+                    "translated": "❌ LibreTranslate not available or returned nothing.",
+                    "audio_url": None
+                })
+
+            # Solo generar audio si hay texto válido
             tts = gTTS(text=translated, lang=target_language)
             filename = f"{uuid.uuid4()}.mp3"
             filepath = os.path.join("static", "audio", filename)
@@ -50,7 +56,7 @@ def translate_text(request):
             })
 
         except Exception as e:
-            print("Error al traducir o generar audio:", e)
-            return JsonResponse({"error": "Error en el servidor"}, status=500)
+            print("❌ Error al traducir o generar audio:", e)
+            return JsonResponse({"error": "Server error. Check translation or audio step."}, status=500)
 
-    return JsonResponse({"error": "Método no permitido"}, status=405)
+    return JsonResponse({"error": "Invalid method"}, status=405)
