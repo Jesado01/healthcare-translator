@@ -1,7 +1,7 @@
 from django.urls import path
-from . import views
+from core import views
 
 urlpatterns = [
-    path('', views.index),
-    path('translate/', views.translate_text),
+    path("", views.index),
+    path("translate/", views.translate_text),
 ]

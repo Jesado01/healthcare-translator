@@ -10,24 +10,22 @@
   <h1>🩺 Healthcare Translator</h1>
 
   <form id="translateForm">
-    <label for="recognizedText">🎤 Speak or type:</label><br>
     <textarea name="text" id="recognizedText" rows="4" cols="60" placeholder="Habla o escribe aquí..."></textarea><br><br>
 
-    <label for="language">🌍 Translate to:</label>
+    <label>Traducir a:</label>
     <select name="language" id="language">
-      <option value="English">English</option>
-      <option value="Spanish">Spanish</option>
-      <option value="French">French</option>
-      <option value="German">German</option>
+      <option value="en">Inglés</option>
+      <option value="es">Español</option>
+      <option value="fr">Francés</option>
+      <option value="de">Alemán</option>
     </select><br><br>
 
-    <button type="submit">Translate</button>
-    <button type="button" id="startBtn">🎙️ Speak</button>
+    <button type="submit">Traducir</button>
+    <button type="button" id="startBtn">🎙️ Hablar</button>
   </form>
 
-  <h3>Translated Text:</h3>
+  <h3>Traducción:</h3>
   <p id="output"></p>
-
   <audio id="audio" controls style="display: none;"></audio>
 
   <script>
@@ -47,21 +45,18 @@
       };
 
       recognition.onerror = function (event) {
-        console.error("Speech recognition error:", event.error);
-        alert("Speech recognition error: " + event.error);
+        alert("Error: " + event.error);
       };
 
       startBtn.addEventListener("click", () => {
         recognition.start();
       });
     } else {
-      alert("Your browser does not support speech recognition.");
+      alert("Tu navegador no soporta reconocimiento de voz.");
     }
 
-    // Form submission and translation
     document.getElementById("translateForm").addEventListener("submit", async (e) => {
       e.preventDefault();
-
       const formData = new FormData(e.target);
 
       try {
@@ -70,15 +65,9 @@
           body: formData,
         });
 
-        if (!response.ok) {
-          throw new Error("Translation failed");
-        }
-
         const data = await response.json();
-        console.log("API response:", data);
 
-        output.innerText = data.translated || "No result";
-
+        output.innerText = data.translated || "Sin resultado";
         if (data.audio_url) {
           audio.src = data.audio_url;
           audio.style.display = "block";
@@ -86,9 +75,10 @@
         } else {
           audio.style.display = "none";
         }
+
       } catch (err) {
-        console.error("Frontend error:", err);
-        output.innerText = "❌ Error while translating";
+        console.error("Error:", err);
+        output.innerText = "❌ Error en la traducción";
         audio.style.display = "none";
       }
     });

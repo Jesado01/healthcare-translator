@@ -1,39 +1,37 @@
 import os
 import uuid
-from django.http import JsonResponse
-from django.views.decorators.csrf import csrf_exempt
-from django.shortcuts import render
+import requests
 from gtts import gTTS
-from openai import OpenAI
-import traceback
-
-client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
+from django.http import JsonResponse
+from django.shortcuts import render
+from django.views.decorators.csrf import csrf_exempt
 
 def index(request):
     return render(request, "index.html")
+
+def translate_libretranslate(text, target_lang_code):
+    response = requests.post("https://libretranslate.de/translate", json={
+        "q": text,
+        "source": "auto",
+        "target": target_lang_code,
+        "format": "text"
+    })
+    return response.json()["translatedText"]
 
 @csrf_exempt
 def translate_text(request):
     if request.method == "POST":
         input_text = request.POST.get("text")
-        target_language = request.POST.get("language")
+        target_language = request.POST.get("language", "en")
 
         try:
-            # Traducción con OpenAI GPT
-            prompt = f"Traduce este texto médico al {target_language}: {input_text}"
-            response = client.chat.completions.create(
-                model="gpt-3.5-turbo",
-                messages=[
-                    {"role": "system", "content": "Eres un traductor médico experto."},
-                    {"role": "user", "content": prompt}
-                ]
-            )
-            translated = response.choices[0].message.content.strip()
+            # Traduce usando LibreTranslate
+            translated = translate_libretranslate(input_text, target_language)
 
-            # Generar audio con gTTS
-            tts = gTTS(text=translated, lang="es")  # o usa target_language si soporta
+            # Genera el audio con gTTS
+            tts = gTTS(text=translated, lang=target_language)
             filename = f"{uuid.uuid4()}.mp3"
-            filepath = f"static/audio/{filename}"
+            filepath = os.path.join("static", "audio", filename)
             tts.save(filepath)
 
             return JsonResponse({
@@ -42,7 +40,7 @@ def translate_text(request):
             })
 
         except Exception as e:
-            traceback.print_exc()
-            return JsonResponse({"error": "Error processing translation."}, status=500)
+            print("Error al traducir o generar audio:", e)
+            return JsonResponse({"error": "Error en el servidor"}, status=500)
 
-    return JsonResponse({"error": "Invalid request method"}, status=400)
+    return JsonResponse({"error": "Método no permitido"}, status=405)
