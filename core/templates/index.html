@@ -78,7 +78,7 @@
 
       } catch (err) {
         console.error("Error:", err);
-        output.innerText = "❌ Error en la traducción";
+        output.innerText = data.translated || "❌ No translation received";
         audio.style.display = "none";
       }
     });
