@@ -4,12 +4,9 @@ services:
     env: python
     plan: free
     buildCommand: ""
-    startCommand: python manage.py migrate && python manage.py collectstatic --noinput && gunicorn translator_app.wsgi:application
+    startCommand: gunicorn translator_app.wsgi:application
     envVars:
       - key: DJANGO_SETTINGS_MODULE
         value: translator_app.settings
       - key: PYTHON_VERSION
         value: 3.10
-# gunicorn translator_app.wsgi:application
-
-# python manage.py migrate && python manage.py collectstatic --noinput && gunicorn translator_app.wsgi:application

@@ -120,9 +120,9 @@ STATIC_URL = '/static/'
 STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 # Sirve archivos estáticos en producción (Render)
-# if not DEBUG:
-#     import mimetypes
-#     mimetypes.add_type("text/css", ".css", True)
+if not DEBUG:
+    import mimetypes
+    mimetypes.add_type("text/css", ".css", True)
 
 #     STATICFILES_STORAGE = 'django.contrib.staticfiles.storage.StaticFilesStorage'
 
