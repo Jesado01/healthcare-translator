@@ -63,3 +63,17 @@ body {
     margin-top: 1.5rem;
     display: block;
   }
+
+    #translationResult{
+    background-color: white !important;
+    padding: 2rem;
+    border-radius: 12px;
+    border: 1px solid #ffffff;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    width: 400px;
+    height: auto;
+    min-height: 200px;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+  }

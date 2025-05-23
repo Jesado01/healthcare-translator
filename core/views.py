@@ -32,7 +32,7 @@ def translate_libretranslate(text, target_lang_code):
 def translate_text(request):
     if request.method == "POST":
         input_text = request.POST.get("text")
-        target_language = request.POST.get("language", "en")
+        target_language = request.POST.get("language")
 
         try:
             # Traducción segura con validación
