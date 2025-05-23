@@ -10,23 +10,35 @@ def index(request):
     return render(request, "index.html")
 
 def translate_libretranslate(text, target_lang_code):
-    try:
-        response = requests.post(
-            "https://translate.argosopentech.com/translate",
-            json={
-                "q": text,
-                "source": "auto",
-                "target": target_lang_code,
-                "format": "text"
-            },
-            timeout=10
-        )
-        data = response.json()
-        print("🟢 Traducción recibida:", data)
-        return data.get("translatedText", None)
-    except Exception as e:
-        print("❌ Error al traducir:", e)
-        return None
+    endpoints = [
+        "https://translate.argosopentech.com/translate",
+        "https://libretranslate.de/translate",
+        "https://translate.astian.org/translate"
+    ]
+
+    for url in endpoints:
+        try:
+            response = requests.post(
+                url,
+                json={
+                    "q": text,
+                    "source": "auto",
+                    "target": target_lang_code,
+                    "format": "text"
+                },
+                timeout=10
+            )
+            data = response.json()
+            translated = data.get("translatedText", "").strip()
+            if translated:
+                print(f"🟢 Traducción recibida desde {url}: {translated}")
+                return translated
+        except Exception as e:
+            print(f"⚠️ Error usando {url}: {e}")
+            continue
+
+    print("❌ Todos los endpoints de LibreTranslate fallaron.")
+    return None
 
 @csrf_exempt
 def translate_text(request):
