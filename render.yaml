@@ -4,7 +4,7 @@ services:
     env: python
     plan: free
     buildCommand: ""
-    startCommand: gunicorn translator_app.wsgi:application
+    startCommand: python manage.py migrate && python manage.py collectstatic --noinput && gunicorn translator_app.wsgi:application
     envVars:
       - key: DJANGO_SETTINGS_MODULE
         value: translator_app.settings
