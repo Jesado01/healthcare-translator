@@ -8,7 +8,10 @@
     <link rel="stylesheet" href="{% static 'css/style.css' %}" />
   </head>
   <body>
-    <h1>🩺 Healthcare Translator</h1>
+    <h1>
+      🩺 <span class="primary">Healthcare</span>
+      <span class="secondary">Translator</span>
+    </h1>
 
     <div class="form-container">
       <form id="translateForm">
@@ -28,8 +31,11 @@
           placeholder="Press 🎙️ Talk to start the recording"
         ></textarea
         ><br /><br />
-
-        <button type="button" id="startBtn">🎙️ Talk</button>
+        <div class="btn-wrapper">
+          <button type="button" id="startBtn" class="morph-button">
+            🎙️ Talk
+          </button>
+        </div>
       </form>
       <br /><br />
 
@@ -72,6 +78,7 @@
           recognition.lang = languageFrom.value;
           recognition.start();
           startBtn.disabled = true;
+          startBtn.classList.add("listening");
           output.innerText = "🎤 Escuchando...";
         };
 
@@ -111,6 +118,8 @@
 
         recognition.onend = () => {
           startBtn.disabled = false;
+
+          startBtn.classList.remove("listening");
         };
 
         recognition.onerror = (event) => {

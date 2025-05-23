@@ -7,9 +7,16 @@ body {
   
   h1 {
     text-align: center;
-    color: #4d8ff1;
     margin-bottom: 2rem;
   }
+
+  .primary {
+    color: red;
+  }
+  .secondary {
+    color: rgb(0, 0, 0);
+  }
+
   
   .form-container {
     display: flex;
@@ -39,6 +46,12 @@ body {
     border: 1px solid #ccc;
   }
 
+  .btn-wrapper {
+    display: flex;
+    justify-content: center;
+    margin-top: 1rem;
+  }
+
   textarea {
     height: 150px;
     resize: none;
@@ -46,7 +59,7 @@ body {
   }
   
   button {
-    background-color: #0d6efd;
+    background-color: #000000;
     color: white;
     border: none;
     padding: 0.8rem 1.5rem;
@@ -56,7 +69,7 @@ body {
   }
   
   button:hover {
-    background-color: #084dc2;
+    background-color: #404040;
   }
   
   audio {
@@ -76,4 +89,47 @@ body {
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
+  }
+
+  .morph-button {
+    background-color: #000000;
+    color: white;
+    padding: 0.8rem 1.5rem;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 140px;
+    height: 45px;
+  }
+  
+  .morph-button.listening {
+    width: 45px;
+    height: 45px;
+    min-width: 0;
+    border-radius: 50%;
+    font-size: 0;
+    padding: 0;
+    background-color: #404040;
+  }
+  
+  .morph-button.listening::after {
+    content: "";
+    width: 20px;
+    height: 20px;
+    border: 2px solid rgba(255, 255, 255, 0.4);
+    border-top: 2px solid white;
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+  }
+
+
+  
+  @keyframes spin {
+    to { transform: rotate(360deg); }
   }
